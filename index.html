@@ -4,15 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>School Portal - Home</title>
-  <link rel="stylesheet" href="style.css">
+  
+  <!-- Font Awesome CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Google Fonts: Poppins for nav -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Top Header with Right-Aligned Icons -->
+  <!-- Top Header -->
   <div class="top-header" id="top-header">
     <div class="content-boundary">
+      <div class="search-wrapper">
+        <i class="fas fa-search" id="search-icon"></i>
+        <input type="text" placeholder="Search..." id="search-input">
+      </div>
       <div class="social-links">
         <a href="https://schoology.com" target="_blank" title="Schoology">
           <i class="fas fa-graduation-cap"></i>
@@ -35,7 +44,7 @@
         <a href="academics.html">Department</a>
         <a href="admissions.html">Student Services</a>
         <a href="events.html">Contact Us</a>
-        <a href="oneofus.html">Be One of Us</a>
+        <a href="beoneofus.html">Be One of Us</a>
       </nav>
     </div>
   </header>
@@ -43,13 +52,18 @@
   <!-- Main Content -->
   <main>
     <div class="content-boundary container">
-      <section class="fade-in-section">
+      <section>
         <h2>Welcome to Our School</h2>
         <p>Scroll down to see the main header slide up as the top header disappears.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+        <p>Morbi suscipit, justo a sollicitudin dapibus, eros lorem mattis ex...</p>
+        <p>Donec gravida purus non dui consequat, eget bibendum velit vulputate...</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+        <p>Morbi suscipit, justo a sollicitudin dapibus, eros lorem mattis ex...</p>
+        <p>Donec gravida purus non dui consequat, eget bibendum velit vulputate...</p>
       </section>
 
-      <section class="fade-in-section">
+      <section>
         <h2>Our Programs</h2>
         <div class="card-container">
           <div class="card">
@@ -67,12 +81,13 @@
         </div>
       </section>
 
-      <section class="fade-in-section">
+      <section>
         <h2>News & Announcements</h2>
         <p>New school semester starts next week. Make sure you have all your materials ready!</p>
+        <p>Upcoming events: science fair, art exhibition, sports tournament, debate competition.</p>
       </section>
 
-      <section class="fade-in-section">
+      <section>
         <h2>Gallery</h2>
         <div class="gallery">
           <div class="image">Image 1</div>
@@ -84,7 +99,7 @@
         </div>
       </section>
 
-      <section class="fade-in-section">
+      <section>
         <h2>Contact Us</h2>
         <p>Email: info@myschool.com</p>
         <p>Phone: +123 456 7890</p>
@@ -100,6 +115,5 @@
   </footer>
 
   <script src="script.js"></script>
-
 </body>
 </html>

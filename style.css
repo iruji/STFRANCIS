@@ -1,11 +1,7 @@
-/* Include padding/border in width calculations */
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-/* General Styles */
 body {
-  font-family: Arial, sans-serif; /* Body keeps Arial */
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   background: #f9f9f9;
@@ -21,7 +17,7 @@ body {
 }
 
 @media (max-width: 768px) {
-  .content-boundary { padding: 0 20px; }
+  .content-boundary { padding: 0 20px; flex-wrap: wrap; }
 }
 
 /* Top Header */
@@ -34,9 +30,38 @@ body {
 }
 
 .top-header .content-boundary {
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#search-icon {
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: white;
+  padding: 5px;
+  transition: background 0.3s ease;
+}
+
+#search-input {
+  width: 0;
+  opacity: 0;
+  transition: width 0.3s ease, opacity 0.3s ease;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+#search-input.active {
+  width: 200px;
+  opacity: 1;
+}
+
+/* Social Links */
 .social-links {
   display: flex;
   align-items: center;
@@ -60,25 +85,13 @@ body {
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
-.social-links a:hover {
-  background: #FDEF00;
-}
+.social-links a:hover { background: #fdef00; }
+.social-links a:hover i { color: #222; transform: scale(1.2); }
 
-.social-links a:hover i {
-  color: #222;
-  transform: scale(1.2);
-}
-
-.social-links .separator {
-  color: white;
-  margin: 0 5px;
-}
+.social-links .separator { color: white; margin: 0 5px; }
 
 /* Main Header */
 header {
-  font-family: 'Poppins', Arial, sans-serif;
-  font-weight: 400; /* thinner */
-  font-size: 0.95rem; /* adjust smaller */
   background: #fff;
   color: #333;
   padding: 1rem 0;
@@ -91,36 +104,32 @@ header {
   z-index: 998;
 }
 
+header .header-left { display: flex; align-items: center; gap: 30px; }
+header .logo { height: 50px; width: auto; }
 
-header .logo { height: 70px; width: auto; margin-right: 10px; }
-
-/* Second Header Nav Links (Poppins) */
+/* Nav Links */
 header nav {
   display: flex;
-  justify-content: flex-start;
-  gap: 30px;
+  gap: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
 }
 
 header nav a {
-  font-family: 'Poppins', sans-serif; /* Poppins applied */
   color: #333;
   text-decoration: none;
-  font-weight: 400;       /* thinner */
-  font-size: 1rem;        /* smaller size */
-  white-space: nowrap;
-  position: relative;      /* for underline effect */
+  position: relative;
   transition: color 0.3s ease;
 }
 
-/* Animated underline */
 header nav a::after {
   content: '';
   position: absolute;
+  bottom: -5px;
   left: 0;
-  bottom: -3px;
   width: 0%;
   height: 2px;
-  background-color: #ff4b20;
+  background: #ff4b20;
   transition: width 0.3s ease;
 }
 
@@ -133,10 +142,13 @@ header nav a:hover::after {
 }
 
 /* Main Content */
-main .container {
-  display: block;
-  margin-top: 120px;
-  padding: 0 40px;
+main .container { display: block; margin-top: 120px; }
+
+/* Fade-in sections */
+main .container section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
 /* Cards */
@@ -183,16 +195,4 @@ footer {
   color: white;
   text-align: center;
   padding: 1rem 0;
-}
-
-/* Fade-in sections */
-.fade-in-section {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-
-.fade-in-section.visible {
-  opacity: 1;
-  transform: translateY(0);
 }

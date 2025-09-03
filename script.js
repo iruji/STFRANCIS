@@ -1,4 +1,23 @@
-// Header slide up on scroll
+// ===== Fade-in for sections =====
+const sections = document.querySelectorAll('main .container section');
+
+function fadeInSections() {
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 50) {
+      section.style.opacity = 1;
+      section.style.transform = 'translateY(0)';
+    }
+  });
+}
+
+// Initial load
+window.addEventListener('load', () => { fadeInSections(); });
+
+// Fade in on scroll
+window.addEventListener('scroll', () => { fadeInSections(); });
+
+// ===== Header transform on scroll =====
 const header = document.getElementById('main-header');
 const topHeader = document.getElementById('top-header');
 const topHeaderHeight = topHeader.offsetHeight;
@@ -13,23 +32,11 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// Fade-in sections on scroll
-const faders = document.querySelectorAll('.fade-in-section');
+// ===== Search bar toggle =====
+const searchIcon = document.getElementById('search-icon');
+const searchInput = document.getElementById('search-input');
 
-const appearOptions = {
-  threshold: 0.1,
-  rootMargin: "0px 0px -50px 0px"
-};
-
-const appearOnScroll = new IntersectionObserver((entries, observer) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
-  });
-}, appearOptions);
-
-faders.forEach(fader => {
-  appearOnScroll.observe(fader);
+searchIcon.addEventListener('click', () => {
+  searchInput.classList.toggle('active');
+  if (searchInput.classList.contains('active')) searchInput.focus();
 });
