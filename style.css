@@ -110,35 +110,141 @@ header .logo { height: 50px; width: auto; }
 /* Nav Links */
 header nav {
   display: flex;
-  gap: 50px;
+  align-items: center;
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
+  gap: 0;
 }
 
-header nav a {
-  color: #333;
-  text-decoration: none;
+header nav > a,
+header nav > .dropdown {
+  margin-right: 40px;   
+  display: inline-block;     /* makes hover padding work */
+  padding: 10px 0;           /* wider vertical hover area */
+  line-height: normal;  
+}
+
+header nav > a:last-child,
+header nav > .dropdown:last-child {
+  margin-right: 0;
+}
+
+.dropdown {
   position: relative;
-  transition: color 0.3s ease;
+  display: inline-block;
 }
 
-header nav a::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background: #ff4b20;
-  transition: width 0.3s ease;
+.dropbtn {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0;
+  transition: color 0.3s;
 }
 
-header nav a:hover {
+.dropbtn:hover {
   color: #ff4b20;
 }
 
-header nav a:hover::after {
-  width: 100%;
+.caret {
+  margin-left: 6px;
+  font-size: 1.1em;
+  color: #111;
+  font-weight: 400;
+  font-family: 'Arial', sans-serif;
+  display: inline-block;
+  transition: none;
+}
+
+.chevron-up {
+  display: none;
+}
+
+.dropdown:hover .chevron-down {
+  display: none;
+}
+.dropdown:hover .chevron-up {
+  display: inline;
+}
+
+/* Dropdown content moved slightly up but hover area preserved */
+.dropdown-content {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  background: #fff;
+  min-width: 180px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 1000;
+  top: 114%;          /* visually closer to nav item */
+  margin-top: -5px;    /* bridges hover gap */
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Keep dropdown visible when hovering button OR dropdown */
+.dropdown:hover .dropdown-content,
+.dropdown:focus-within .dropdown-content,
+.dropdown-content:hover {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Dropdown links */
+.dropdown-content a {
+  color: #333;
+  padding: 16px 24px;   /* keep edges spacious */
+  text-decoration: none;
+  display: block;
+  transition: color 0.3s;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;    /* increased from 0.85rem */
+  position: relative;
+  margin: 0;             
+}
+
+/* Smaller space between links */
+.dropdown-content a + a {
+  margin-top: 2px;       /* small gap between items */
+}
+
+.dropdown-content a::after {
+  content: none;
+}
+
+.dropdown-content a:hover {
+  color: #ff4b20;
+  background: none;
+}
+
+/* Remove default link styles for nav */
+header nav a,
+header nav .dropbtn {
+  color: #333;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+header nav a:hover,
+header nav .dropbtn:hover {
+  color: #ff4b20;
+  text-decoration: none;
 }
 
 /* Main Content */
@@ -195,4 +301,13 @@ footer {
   color: white;
   text-align: center;
   padding: 1rem 0;
+}
+
+.dropbtn .caret svg polyline {
+  stroke: #111;
+  transition: stroke 0.3s;
+}
+
+.dropbtn:hover .caret svg polyline {
+  stroke: #ff4b20;
 }
