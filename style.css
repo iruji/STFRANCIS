@@ -118,10 +118,7 @@ header nav {
 
 header nav > a,
 header nav > .dropdown {
-  margin-right: 40px;   
-  display: inline-block;     /* makes hover padding work */
-  padding: 10px 0;           /* wider vertical hover area */
-  line-height: normal;  
+  margin-right: 40px;
 }
 
 header nav > a:last-child,
@@ -146,7 +143,7 @@ header nav > .dropdown:last-child {
   color: #333;
   font-size: 1rem;
   font-weight: 500;
-  padding: 0;
+  padding: 0.5rem 0.75rem; /* wider hover range */
   transition: color 0.3s;
 }
 
@@ -161,21 +158,13 @@ header nav > .dropdown:last-child {
   font-weight: 400;
   font-family: 'Arial', sans-serif;
   display: inline-block;
-  transition: none;
 }
 
-.chevron-up {
-  display: none;
-}
+.chevron-up { display: none; }
 
-.dropdown:hover .chevron-down {
-  display: none;
-}
-.dropdown:hover .chevron-up {
-  display: inline;
-}
+.dropdown:hover .chevron-down { display: none; }
+.dropdown:hover .chevron-up { display: inline; }
 
-/* Dropdown content moved slightly up but hover area preserved */
 .dropdown-content {
   opacity: 0;
   visibility: hidden;
@@ -185,8 +174,7 @@ header nav > .dropdown:last-child {
   min-width: 180px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   z-index: 1000;
-  top: 114%;          /* visually closer to nav item */
-  margin-top: -5px;    /* bridges hover gap */
+  top: 100%;           /* slightly lower for visual space */
   border-radius: 4px;
   overflow: hidden;
   display: flex;
@@ -194,36 +182,22 @@ header nav > .dropdown:last-child {
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-/* Keep dropdown visible when hovering button OR dropdown */
 .dropdown:hover .dropdown-content,
-.dropdown:focus-within .dropdown-content,
-.dropdown-content:hover {
+.dropdown:focus-within .dropdown-content {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
 
-/* Dropdown links */
 .dropdown-content a {
   color: #333;
-  padding: 16px 24px;   /* keep edges spacious */
+  padding: 10px 18px;   /* more space from edges */
   text-decoration: none;
   display: block;
-  transition: color 0.3s;
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
-  font-size: 0.95rem;    /* increased from 0.85rem */
+  font-size: 0.9rem;
   position: relative;
-  margin: 0;             
-}
-
-/* Smaller space between links */
-.dropdown-content a + a {
-  margin-top: 2px;       /* small gap between items */
-}
-
-.dropdown-content a::after {
-  content: none;
 }
 
 .dropdown-content a:hover {
@@ -231,26 +205,55 @@ header nav > .dropdown:last-child {
   background: none;
 }
 
-/* Remove default link styles for nav */
+/* Wider hover area for nav links without changing spacing */
 header nav a,
 header nav .dropbtn {
+  display: inline-block;       /* needed for padding to apply */
+  padding: 0.75rem 0.5rem;     /* vertical padding increases hover area */
   color: #333;
   text-decoration: none;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 500;
   transition: color 0.3s;
 }
 
+/* Hover color change */
 header nav a:hover,
-header nav .dropbtn:hover {
+header nav a:focus,
+header nav .dropbtn:hover,
+header nav .dropbtn:focus {
   color: #ff4b20;
-  text-decoration: none;
 }
+
+/* ===== Sliding underline ONLY for "Be one of us" ===== */
+header nav a.underline-slide {
+  position: relative;   /* needed for ::after */
+}
+
+/* Sliding underline only under the text */
+header nav a.underline-slide span {
+  position: relative;
+  display: inline-block;  /* needed for ::after */
+}
+
+header nav a.underline-slide span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 3px;
+  background-color: #ff4b20;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+header nav a.underline-slide span:hover::after,
+header nav a.underline-slide span:focus::after {
+  width: 100%;
+}
+
 
 /* Main Content */
 main .container { display: block; margin-top: 120px; }
 
-/* Fade-in sections */
 main .container section {
   opacity: 0;
   transform: translateY(30px);
