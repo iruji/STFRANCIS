@@ -23,12 +23,12 @@
         <input type="text" placeholder="Search..." id="search-input">
       </div>
       <div class="social-links">
-        <a href="https://schoology.com" target="_blank" title="Schoology">
+        <a href="https://stfrancis.schoology.com/login?&school=2624793884" target="_blank" title="Schoology">
           <i class="fas fa-graduation-cap"></i>
         </a>
         <span class="separator">|</span>
-        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.facebook.com/mysfacbacoor" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.youtube.com/@sfacbacoor-basiceducation/featured" title="YouTube"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
   </div>
@@ -41,11 +41,13 @@
       </a>
       <nav>
         <a href="about.html">About</a>
+
+        <!-- Department Dropdown -->
         <div class="dropdown">
           <button type="button" class="dropbtn">
             Department
             <span class="caret" aria-hidden="true">
-              <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+              <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <polyline points="2,2 8,8 14,2" stroke="#111" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </span>
@@ -55,7 +57,62 @@
             <a href="higher-education.html">Higher Education</a>
           </div>
         </div>
-        <a href="admissions.html">Student Services</a>
+
+        <!-- Student Services Dropdown -->
+        <div class="dropdown">
+          <button type="button" class="dropbtn">
+            Student Services
+            <span class="caret" aria-hidden="true">
+              <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polyline points="2,2 8,8 14,2" stroke="#111" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+          <div class="dropdown-content">
+
+            <!-- Bacoor with multilevel dropdown -->
+            <div class="nested-dropdown">
+              <span class="nested-header">
+                Bacoor
+                <span class="side-caret" aria-hidden="true">
+                  <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <polyline points="2,2 8,8 14,2" stroke="#111" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </span>
+              <div class="nested-content">
+                <a href="#">HED Enrollment</a>
+                <a href="#">HED Online Grade</a>
+                <a href="#">HED GCS</a>
+                <a href="#">SFAC | SAS OPAC</a>
+                <a href="#">Alumni Tracer</a>
+                <a href="#">BED Enrollment</a>
+              </div>
+            </div>
+
+            <!-- Las Piñas with multilevel dropdown -->
+            <div class="nested-dropdown">
+              <span class="nested-header">
+                Las Piñas
+                <span class="side-caret" aria-hidden="true">
+                  <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <polyline points="2,2 8,8 14,2" stroke="#111" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </span>
+              <div class="nested-content">
+                <a href="#">HED Enrollment</a>
+                <a href="#">HED Online Grade</a>
+                <a href="#">SFAC | SAS OPAC</a>
+                <a href="#">GSBE Library</a>
+                <a href="#">Alumni Tracer</a>
+                <a href="#">BED Enrollment</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
         <a href="events.html">Contact Us</a>
         <a href="#" class="underline-slide"><span>Be one of us</span></a>
       </nav>
@@ -65,17 +122,18 @@
   <!-- Main Content -->
   <main>
     <div class="content-boundary container">
+      
+      <!-- Section 1 -->
       <section>
         <h2>Welcome to Our School</h2>
-        <p>Scroll down to see the main header slide up as the top header disappears.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-        <p>Morbi suscipit, justo a sollicitudin dapibus, eros lorem mattis ex...</p>
-        <p>Donec gravida purus non dui consequat, eget bibendum velit vulputate...</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-        <p>Morbi suscipit, justo a sollicitudin dapibus, eros lorem mattis ex...</p>
-        <p>Donec gravida purus non dui consequat, eget bibendum velit vulputate...</p>
+        <p>Hover over "Student Services" in the navigation to see the multilevel dropdown in action. You can now hover over "Bacoor" or "Las Piñas" to see their respective sub-menus appear to the right.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p>Morbi suscipit, justo a sollicitudin dapibus, eros lorem mattis ex, vel consectetur nulla ipsum in magna.</p>
+        <p>Donec gravida purus non dui consequat, eget bibendum velit vulputate. Vestibulum ante ipsum primis in faucibus.</p>
+        <p>Donec gravida purus non dui consequat, eget bibendum velit vulputate. Vestibulum ante ipsum primis in faucibus.</p>
       </section>
 
+      <!-- Section 2 -->
       <section>
         <h2>Our Programs</h2>
         <div class="card-container">
@@ -94,12 +152,14 @@
         </div>
       </section>
 
+      <!-- Section 3 -->
       <section>
         <h2>News & Announcements</h2>
         <p>New school semester starts next week. Make sure you have all your materials ready!</p>
         <p>Upcoming events: science fair, art exhibition, sports tournament, debate competition.</p>
       </section>
 
+      <!-- Section 4 -->
       <section>
         <h2>Gallery</h2>
         <div class="gallery">
@@ -112,12 +172,14 @@
         </div>
       </section>
 
+      <!-- Section 5 -->
       <section>
         <h2>Contact Us</h2>
         <p>Email: info@myschool.com</p>
         <p>Phone: +123 456 7890</p>
         <p>Address: 123 School Road, Education City</p>
       </section>
+
     </div>
   </main>
 
