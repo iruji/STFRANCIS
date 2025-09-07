@@ -29,6 +29,43 @@ body {
 }
 
 /* ========================
+   Unified Header Container
+======================== */
+.header-container {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Header states */
+.header-container.scrolled-away {
+  transform: translateY(-100%);
+}
+
+.header-container.popup-mode {
+  transform: translateY(0);
+  animation: headerPopup 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes headerPopup {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0.8;
+  }
+  70% {
+    transform: translateY(10px);
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ========================
    Top Header
 ======================== */
 .top-header {
@@ -36,7 +73,6 @@ body {
   color: white;
   padding: 0.5rem 0;
   width: 100%;
-  z-index: 999;
 }
 
 .top-header .content-boundary {
@@ -112,32 +148,37 @@ body {
 /* ========================
    Main Header & Nav
 ======================== */
-header {
+.main-header {
   background: #fff;
   color: #333;
   padding: 1rem 0;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  left: 0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  z-index: 998;
 }
 
-header .header-left {
+/* Popup mode styling */
+.header-container.popup-mode .top-header {
+  display: none;
+}
+
+.header-container.popup-mode .main-header {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+}
+
+.main-header .header-left {
   display: flex;
   align-items: center;
   gap: 30px;
 }
 
-header .logo {
+.main-header .logo {
   height: 50px;
   width: auto;
 }
 
 /* Nav Links */
-header nav {
+.main-header nav {
   display: flex;
   align-items: center;
   font-family: 'Poppins', sans-serif;
@@ -145,13 +186,13 @@ header nav {
   gap: 0;
 }
 
-header nav > a,
-header nav > .dropdown {
+.main-header nav > a,
+.main-header nav > .dropdown {
   margin-right: 40px;
 }
 
-header nav > a:last-child,
-header nav > .dropdown:last-child {
+.main-header nav > a:last-child,
+.main-header nav > .dropdown:last-child {
   margin-right: 0;
 }
 
@@ -233,8 +274,8 @@ header nav > .dropdown:last-child {
 }
 
 /* Wider hover area for nav links */
-header nav a,
-header nav .dropbtn {
+.main-header nav a,
+.main-header nav .dropbtn {
   display: inline-block;
   padding: 0.75rem 0.5rem;
   color: #333;
@@ -242,26 +283,26 @@ header nav .dropbtn {
   transition: color 0.3s;
 }
 
-header nav a:hover,
-header nav a:focus,
-header nav .dropbtn:hover,
-header nav .dropbtn:focus {
+.main-header nav a:hover,
+.main-header nav a:focus,
+.main-header nav .dropbtn:hover,
+.main-header nav .dropbtn:focus {
   color: #ff4b20;
 }
 
 /* ========================
    Sliding underline "Be one of us"
 ======================== */
-header nav a.underline-slide {
+.main-header nav a.underline-slide {
   position: relative;
 }
 
-header nav a.underline-slide span {
+.main-header nav a.underline-slide span {
   position: relative;
   display: inline-block;
 }
 
-header nav a.underline-slide span::after {
+.main-header nav a.underline-slide span::after {
   content: '';
   position: absolute;
   left: 0;
@@ -272,8 +313,8 @@ header nav a.underline-slide span::after {
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-header nav a.underline-slide span:hover::after,
-header nav a.underline-slide span:focus::after {
+.main-header nav a.underline-slide span:hover::after,
+.main-header nav a.underline-slide span:focus::after {
   width: 100%;
 }
 
@@ -372,17 +413,127 @@ header nav a.underline-slide span:focus::after {
 }
 
 /* ========================
+   Hero Slider Section
+======================== */
+.hero-slider {
+  position: relative;
+  height: 80vh;
+  min-height: 600px;
+  overflow: hidden;
+  margin-top: 120px; /* Account for fixed header */
+}
+
+.hero-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero-slide.active {
+  opacity: 1;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(237, 27, 36, 0.8) 0%, rgba(237, 27, 36, 0.4) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.hero-content {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 40px;
+  color: white;
+  z-index: 10;
+}
+
+.hero-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  line-height: 1.4;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.hero-cta {
+  display: inline-block;
+  background: #fdef00;
+  color: #333;
+  padding: 15px 30px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+/* Slider Navigation Dots */
+.hero-dots {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  z-index: 20;
+}
+
+.hero-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.hero-dot.active {
+  background: #fdef00;
+  transform: scale(1.2);
+}
+
+/* ========================
    Main Content
 ======================== */
 main .container { 
   display: block; 
-  margin-top: 120px; 
+  margin-top: 0; /* Remove margin since hero handles spacing */
+  padding-top: 60px;
 }
 
 main .container section {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.6s ease, transform 0.6s ease;
+  margin-bottom: 60px;
 }
 
 /* ========================
@@ -455,6 +606,18 @@ footer {
    Mobile Responsive
 ======================== */
 @media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .hero-content {
+    padding: 0 20px;
+  }
+
   .nested-content {
     position: static;
     opacity: 1;

@@ -9,131 +9,167 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Google Fonts: Poppins for nav -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Top Header -->
-  <div class="top-header" id="top-header">
-    <div class="content-boundary">
-      <div class="search-wrapper">
-        <i class="fas fa-search" id="search-icon"></i>
-        <input type="text" placeholder="Search..." id="search-input">
-      </div>
-      <div class="social-links">
-        <a href="https://stfrancis.schoology.com/login?&school=2624793884" target="_blank" title="Schoology">
-          <i class="fas fa-graduation-cap"></i>
-        </a>
-        <span class="separator">|</span>
-        <a href="https://www.facebook.com/mysfacbacoor" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://www.youtube.com/@sfacbacoor-basiceducation/featured" title="YouTube"><i class="fab fa-youtube"></i></a>
+  <!-- Unified Header Container -->
+  <div class="header-container" id="header-container">
+    <!-- Top Header -->
+    <div class="top-header" id="top-header">
+      <div class="content-boundary">
+        <div class="search-wrapper">
+          <i class="fas fa-search" id="search-icon"></i>
+          <input type="text" placeholder="Search..." id="search-input">
+        </div>
+        <div class="social-links">
+          <a href="https://stfrancis.schoology.com/login?&school=2624793884" target="_blank" title="Schoology">
+            <i class="fas fa-graduation-cap"></i>
+          </a>
+          <span class="separator">|</span>
+          <a href="https://www.facebook.com/mysfacbacoor" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.youtube.com/@sfacbacoor-basiceducation/featured" title="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
       </div>
     </div>
+
+    <!-- Main Header -->
+    <header class="main-header" id="main-header">
+      <div class="content-boundary header-left">
+        <a href="index.html" class="logo-link">
+          <img src="images/logo.png" alt="School Logo" class="logo">
+        </a>
+        <nav>
+          <a href="about.html">About</a>
+
+          <!-- Department Dropdown -->
+          <div class="dropdown">
+            <button type="button" class="dropbtn">
+              Department
+              <span class="caret" aria-hidden="true">
+                <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <polyline points="2,2 8,8 14,2" stroke="#111" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+            <div class="dropdown-content">
+              <a href="basic-education.html">Basic Education</a>
+              <a href="higher-education.html">Higher Education</a>
+            </div>
+          </div>
+
+          <!-- Student Services Dropdown -->
+          <div class="dropdown">
+            <button type="button" class="dropbtn">
+              Student Services
+              <span class="caret" aria-hidden="true">
+                <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <polyline points="2,2 8,8 14,2" stroke="#111" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+            <div class="dropdown-content">
+
+              <!-- Bacoor with multilevel dropdown -->
+              <div class="nested-dropdown">
+                <span class="nested-header">
+                  Bacoor
+                  <span class="side-caret" aria-hidden="true">
+                    <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="2,2 8,8 14,2" stroke="#111" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </span>
+                <div class="nested-content">
+                  <a href="#">HED Enrollment</a>
+                  <a href="#">HED Online Grade</a>
+                  <a href="#">HED GCS</a>
+                  <a href="#">SFAC | SAS OPAC</a>
+                  <a href="#">Alumni Tracer</a>
+                  <a href="#">BED Enrollment</a>
+                </div>
+              </div>
+
+              <!-- Las Piñas with multilevel dropdown -->
+              <div class="nested-dropdown">
+                <span class="nested-header">
+                  Las Piñas
+                  <span class="side-caret" aria-hidden="true">
+                    <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="2,2 8,8 14,2" stroke="#111" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </span>
+                <div class="nested-content">
+                  <a href="#">HED Enrollment</a>
+                  <a href="#">HED Online Grade</a>
+                  <a href="#">SFAC | SAS OPAC</a>
+                  <a href="#">GSBE Library</a>
+                  <a href="#">Alumni Tracer</a>
+                  <a href="#">BED Enrollment</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <a href="events.html">Contact Us</a>
+          <a href="#" class="underline-slide"><span>Be one of us</span></a>
+        </nav>
+      </div>
+    </header>
   </div>
 
-  <!-- Main Header -->
-  <header id="main-header">
-    <div class="content-boundary header-left">
-      <a href="index.html" class="logo-link">
-        <img src="images/logo.png" alt="School Logo" class="logo">
-      </a>
-      <nav>
-        <a href="about.html">About</a>
-
-        <!-- Department Dropdown -->
-        <div class="dropdown">
-          <button type="button" class="dropbtn">
-            Department
-            <span class="caret" aria-hidden="true">
-              <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <polyline points="2,2 8,8 14,2" stroke="#111" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </button>
-          <div class="dropdown-content">
-            <a href="basic-education.html">Basic Education</a>
-            <a href="higher-education.html">Higher Education</a>
-          </div>
+  <!-- Hero Slider Section -->
+  <section class="hero-slider" id="hero-slider">
+    <!-- Slide 1 -->
+    <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+      <div class="hero-overlay">
+        <div class="hero-content">
+          <h1 class="hero-title">Excellence in Education</h1>
+          <p class="hero-subtitle">Empowering students to reach their full potential through innovative learning experiences and comprehensive academic programs.</p>
+          <a href="#" class="hero-cta">Explore Programs</a>
         </div>
-
-        <!-- Student Services Dropdown -->
-        <div class="dropdown">
-          <button type="button" class="dropbtn">
-            Student Services
-            <span class="caret" aria-hidden="true">
-              <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <polyline points="2,2 8,8 14,2" stroke="#111" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </button>
-          <div class="dropdown-content">
-
-            <!-- Bacoor with multilevel dropdown -->
-            <div class="nested-dropdown">
-              <span class="nested-header">
-                Bacoor
-                <span class="side-caret" aria-hidden="true">
-                  <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <polyline points="2,2 8,8 14,2" stroke="#111" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </span>
-              <div class="nested-content">
-                <a href="#">HED Enrollment</a>
-                <a href="#">HED Online Grade</a>
-                <a href="#">HED GCS</a>
-                <a href="#">SFAC | SAS OPAC</a>
-                <a href="#">Alumni Tracer</a>
-                <a href="#">BED Enrollment</a>
-              </div>
-            </div>
-
-            <!-- Las Piñas with multilevel dropdown -->
-            <div class="nested-dropdown">
-              <span class="nested-header">
-                Las Piñas
-                <span class="side-caret" aria-hidden="true">
-                  <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <polyline points="2,2 8,8 14,2" stroke="#111" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </span>
-              <div class="nested-content">
-                <a href="#">HED Enrollment</a>
-                <a href="#">HED Online Grade</a>
-                <a href="#">SFAC | SAS OPAC</a>
-                <a href="#">GSBE Library</a>
-                <a href="#">Alumni Tracer</a>
-                <a href="#">BED Enrollment</a>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <a href="events.html">Contact Us</a>
-        <a href="#" class="underline-slide"><span>Be one of us</span></a>
-      </nav>
+      </div>
     </div>
-  </header>
+
+    <!-- Slide 2 -->
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+      <div class="hero-overlay">
+        <div class="hero-content">
+          <h1 class="hero-title">Modern Facilities</h1>
+          <p class="hero-subtitle">State-of-the-art laboratories, libraries, and learning spaces designed to inspire innovation and collaborative learning.</p>
+          <a href="#" class="hero-cta">Take a Tour</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+      <div class="hero-overlay">
+        <div class="hero-content">
+          <h1 class="hero-title">Student Success</h1>
+          <p class="hero-subtitle">Join thousands of successful graduates who have built rewarding careers and made positive impacts in their communities.</p>
+          <a href="#" class="hero-cta">Apply Now</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Dots -->
+    <div class="hero-dots">
+      <div class="hero-dot active" data-slide="0"></div>
+      <div class="hero-dot" data-slide="1"></div>
+      <div class="hero-dot" data-slide="2"></div>
+    </div>
+  </section>
 
   <!-- Main Content -->
   <main>
     <div class="content-boundary container">
       
       <!-- Section 1 -->
-      <section>
-        <h2>Welcome to Our School</h2>
-        <p>Hover over "Student Services" in the navigation to see the multilevel dropdown in action. You can now hover over "Bacoor" or "Las Piñas" to see their respective sub-menus appear to the right.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        <p>Morbi suscipit, justo a sollicitudin dapibus, eros lorem mattis ex, vel consectetur nulla ipsum in magna.</p>
-        <p>Donec gravida purus non dui consequat, eget bibendum velit vulputate. Vestibulum ante ipsum primis in faucibus.</p>
-        <p>Donec gravida purus non dui consequat, eget bibendum velit vulputate. Vestibulum ante ipsum primis in faucibus.</p>
-      </section>
-
-      <!-- Section 2 -->
       <section>
         <h2>Our Programs</h2>
         <div class="card-container">
@@ -152,14 +188,14 @@
         </div>
       </section>
 
-      <!-- Section 3 -->
+      <!-- Section 2 -->
       <section>
         <h2>News & Announcements</h2>
         <p>New school semester starts next week. Make sure you have all your materials ready!</p>
         <p>Upcoming events: science fair, art exhibition, sports tournament, debate competition.</p>
       </section>
 
-      <!-- Section 4 -->
+      <!-- Section 3 -->
       <section>
         <h2>Gallery</h2>
         <div class="gallery">
@@ -172,7 +208,7 @@
         </div>
       </section>
 
-      <!-- Section 5 -->
+      <!-- Section 4 -->
       <section>
         <h2>Contact Us</h2>
         <p>Email: info@myschool.com</p>
