@@ -64,7 +64,7 @@ window.addEventListener('load', () => { fadeInSections(); });
 // Fade in on scroll
 window.addEventListener('scroll', () => { fadeInSections(); });
 
-// ===== Unified Header Control =====
+// ===== Header Control =====
 const headerContainer = document.getElementById('header-container');
 const headerHeight = headerContainer.offsetHeight;
 let lastScrollY = window.scrollY;
@@ -73,19 +73,18 @@ let ticking = false;
 function updateHeader() {
   const scrollY = window.scrollY;
   const scrollDirection = scrollY > lastScrollY ? 'down' : 'up';
-  const scrollThreshold = headerHeight * 1.5; // When to trigger popup mode
   
-  if (scrollY > scrollThreshold) {
-    // After significant scroll, show popup mode
-    headerContainer.classList.remove('scrolled-away');
-    headerContainer.classList.add('popup-mode');
-  } else if (scrollY > headerHeight) {
-    // Just past initial header height but before threshold - hide header
-    headerContainer.classList.remove('popup-mode');
-    headerContainer.classList.add('scrolled-away');
-  } else {
+  if (scrollY <= headerHeight) {
     // At top of page - show normal header
-    headerContainer.classList.remove('scrolled-away', 'popup-mode');
+    headerContainer.classList.remove('hidden', 'show-on-scroll-up');
+  } else if (scrollDirection === 'down') {
+    // Scrolling down - hide header
+    headerContainer.classList.add('hidden');
+    headerContainer.classList.remove('show-on-scroll-up');
+  } else if (scrollDirection === 'up') {
+    // Scrolling up - show header with slide down animation
+    headerContainer.classList.remove('hidden');
+    headerContainer.classList.add('show-on-scroll-up');
   }
   
   lastScrollY = scrollY;

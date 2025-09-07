@@ -29,7 +29,7 @@ body {
 }
 
 /* ========================
-   Unified Header Container
+   Header Container
 ======================== */
 .header-container {
   position: fixed;
@@ -37,27 +37,24 @@ body {
   top: 0;
   left: 0;
   z-index: 1000;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s ease;
 }
 
 /* Header states */
-.header-container.scrolled-away {
+.header-container.hidden {
   transform: translateY(-100%);
 }
 
-.header-container.popup-mode {
+.header-container.show-on-scroll-up {
   transform: translateY(0);
-  animation: headerPopup 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  animation: slideDownSlow 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-@keyframes headerPopup {
+@keyframes slideDownSlow {
   0% {
     transform: translateY(-100%);
     opacity: 0.8;
-  }
-  70% {
-    transform: translateY(10px);
   }
   100% {
     transform: translateY(0);
@@ -155,12 +152,8 @@ body {
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-/* Popup mode styling */
-.header-container.popup-mode .top-header {
-  display: none;
-}
-
-.header-container.popup-mode .main-header {
+/* Enhanced shadow when showing on scroll up */
+.header-container.show-on-scroll-up .main-header {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(10px);
@@ -244,7 +237,7 @@ body {
   z-index: 1000;
   top: 100%;
   border-radius: 4px;
-  overflow: visible; /* Changed to visible for nested dropdowns */
+  overflow: visible;
   display: flex;
   flex-direction: column;
   transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -340,7 +333,7 @@ body {
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
   font-size: 0.9rem;
-  cursor: default; /* Shows normal cursor, not pointer */
+  cursor: default;
 }
 
 .nested-header:hover {
@@ -364,7 +357,7 @@ body {
   display: flex;
   flex-direction: column;
   transform: translateX(10px);
-  margin-left: -5px; /* Small overlap to prevent gap */
+  margin-left: -5px;
 }
 
 .nested-dropdown:hover .nested-content {
@@ -374,14 +367,12 @@ body {
   transform: translateX(0);
 }
 
-/* Keep nested content open when hovering over it */
 .nested-content:hover {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
 
-/* Side Caret styled like Department caret but rotated */
 .side-caret {
   margin-left: auto;
   display: inline-block;
@@ -420,7 +411,7 @@ body {
   height: 80vh;
   min-height: 600px;
   overflow: hidden;
-  margin-top: 120px; /* Account for fixed header */
+  margin-top: 0; /* Remove margin since header is now in normal flow */
 }
 
 .hero-slide {
@@ -525,7 +516,7 @@ body {
 ======================== */
 main .container { 
   display: block; 
-  margin-top: 0; /* Remove margin since hero handles spacing */
+  margin-top: 0;
   padding-top: 60px;
 }
 
