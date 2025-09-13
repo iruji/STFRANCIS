@@ -45,62 +45,8 @@ dots.forEach((dot, index) => {
   });
 });
 
-// ===== News Slider Functionality =====
-let currentNewsSlide = 0;
-const newsSlides = document.querySelectorAll('.news-slide');
-const newsSlider = document.getElementById('news-slider');
-const totalNewsSlides = newsSlides.length;
-
-function updateNewsSlider() {
-  if (newsSlider) {
-    // Calculate how many slides to show based on screen width
-    const slideWidth = 25; // 25% for desktop
-    const mobileSlideWidth = 80; // 80% for mobile
-    const isMobile = window.innerWidth <= 768;
-    const width = isMobile ? mobileSlideWidth : slideWidth;
-    
-    const translateX = -currentNewsSlide * (width + 2); // 2% for gap
-    newsSlider.style.transform = `translateX(${translateX}%)`;
-  }
-}
-
-function changeNewsSlide(direction) {
-  const isMobile = window.innerWidth <= 768;
-  const maxSlides = isMobile ? totalNewsSlides - 1 : totalNewsSlides - 3;
-  
-  currentNewsSlide += direction;
-  
-  // Wrap around
-  if (currentNewsSlide > maxSlides) {
-    currentNewsSlide = 0;
-  } else if (currentNewsSlide < 0) {
-    currentNewsSlide = maxSlides;
-  }
-  
-  updateNewsSlider();
-}
-
-// Auto-advance news slides every 6 seconds
-let newsSlideInterval = setInterval(() => {
-  changeNewsSlide(1);
-}, 6000);
-
-// Pause news slider on hover
-const newsSliderContainer = document.querySelector('.news-slider-container');
-if (newsSliderContainer) {
-  newsSliderContainer.addEventListener('mouseenter', () => {
-    clearInterval(newsSlideInterval);
-  });
-
-  newsSliderContainer.addEventListener('mouseleave', () => {
-    newsSlideInterval = setInterval(() => {
-      changeNewsSlide(1);
-    }, 6000);
-  });
-}
-
-// Update slider on window resize
-window.addEventListener('resize', updateNewsSlider);
+// ===== News Slider Functionality - REMOVED NAVIGATION =====
+// News slider is now static - no navigation buttons or automatic sliding
 
 // ===== Fade-in for sections =====
 const sections = document.querySelectorAll('main .container section');
@@ -118,7 +64,6 @@ function fadeInSections() {
 // Initial load
 window.addEventListener('load', () => { 
   fadeInSections(); 
-  updateNewsSlider();
 });
 
 // Fade in on scroll
