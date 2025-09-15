@@ -512,7 +512,8 @@ body {
 }
 
 /* ========================
-   News Section - UNIFIED BACKGROUND
+   News Section - UPDATED WITH SLIDER
+   Replace the entire news section in your CSS with this
 ======================== */
 .news-section {
   background: #f9f9f9;
@@ -523,7 +524,7 @@ body {
 
 /* News Header Styling */
 .news-header {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   text-align: center;
   padding: 0 20px;
 }
@@ -563,27 +564,73 @@ body {
   }
 }
 
-/* News Slider Container */
+/* News Slider Container with Navigation */
 .news-slider-container {
   position: relative;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 80px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.news-slider-wrapper {
+  flex: 1;
   overflow: hidden;
-  padding: 0 20px;
-  margin-top: 15px;
+  border-radius: 16px;
 }
 
 .news-slider {
   display: flex;
-  justify-content: center;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  gap: 30px;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 20px;
 }
 
 .news-slide {
-  flex: 0 0 20%;
-  min-width: 250px;
+  flex: 0 0 calc(25% - 15px);
+  min-width: 280px;
 }
 
-/* Enhanced News Item Cards - FIXED IMAGE DISPLAY */
+/* Navigation Buttons */
+.slider-nav {
+  background: rgba(237, 27, 36, 0.9);
+  color: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.slider-nav:hover {
+  background: #ed1b24;
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.slider-nav:active {
+  transform: scale(0.95);
+}
+
+.slider-nav i {
+  font-size: 1.2rem;
+}
+
+.slider-nav:disabled {
+  background: rgba(150, 150, 150, 0.5);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Enhanced News Item Cards */
 .news-item {
   background: white;
   border-radius: 16px;
@@ -599,7 +646,7 @@ body {
 
 .news-item:hover {
   transform: translateY(-5px);
-  box-shadow: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   border-color: rgba(237, 27, 36, 0.25);
 }
 
@@ -610,14 +657,13 @@ body {
   flex-shrink: 0;
 }
 
-/* FIXED: News images - removed opacity transitions that were causing white flashes */
 .news-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
-  opacity: 1 !important; /* Force opacity to be visible */
-  display: block; /* Ensure proper display */
+  opacity: 1 !important;
+  display: block;
 }
 
 .news-item:hover .news-image img {
@@ -707,6 +753,34 @@ body {
   align-items: flex-start;
 }
 
+/* Slider Indicators */
+.news-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+  padding: 0 20px;
+}
+
+.news-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(237, 27, 36, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.news-indicator.active {
+  background: #ed1b24;
+  transform: scale(1.2);
+}
+
+.news-indicator:hover {
+  background: rgba(237, 27, 36, 0.7);
+}
+
 /* Add subtle background pattern */
 .news-section::before {
   content: '';
@@ -719,6 +793,92 @@ body {
     radial-gradient(circle at 20% 20%, rgba(237, 27, 36, 0.02) 0%, transparent 50%),
     radial-gradient(circle at 80% 80%, rgba(253, 239, 0, 0.02) 0%, transparent 50%);
   pointer-events: none;
+}
+
+/* Mobile Responsive */
+@media (max-width: 1200px) {
+  .news-slide {
+    flex: 0 0 calc(33.333% - 14px);
+  }
+}
+
+@media (max-width: 968px) {
+  .news-slider-container {
+    padding: 0 60px;
+  }
+  
+  .news-slide {
+    flex: 0 0 calc(50% - 10px);
+    min-width: 260px;
+  }
+  
+  .slider-nav {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .slider-nav i {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .news-slider-container {
+    padding: 0 50px;
+  }
+  
+  .news-slide {
+    flex: 0 0 calc(100% - 0px);
+    min-width: 240px;
+  }
+  
+  .news-header h2 {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .news-icon {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .news-slider-container {
+    padding: 0 40px;
+    gap: 10px;
+  }
+  
+  .slider-nav {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .slider-nav i {
+    font-size: 1rem;
+  }
+  
+  .news-header h2 {
+    font-size: 1.3rem;
+    padding: 0 10px;
+  }
+  
+  .news-icon {
+    font-size: 1.1rem;
+  }
+  
+  .news-item {
+    height: 320px;
+  }
+  
+  .news-image {
+    height: 200px;
+  }
+  
+  .news-item h3 {
+    font-size: 0.9rem;
+    height: 100px;
+  }
 }
 
 /* ========================

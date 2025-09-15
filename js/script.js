@@ -1,240 +1,194 @@
-// ===== Hero Slider Functionality =====
+// ===== Global Variables =====
 let currentSlide = 0;
-const slides = document.querySelectorAll('.hero-slide');
-const dots = document.querySelectorAll('.hero-dot');
-const totalSlides = slides.length;
+let currentNewsSlide = 0;
+let slideInterval;
+let newsSlideInterval;
+let headerHeight = 0;
+let lastScrollY = 0;
+let ticking = false;
 
-function showSlide(index) {
-  // Remove active class from all slides and dots
+// ===== Hero Slider =====
+function showHeroSlide(index) {
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('.hero-dot');
+
   slides.forEach(slide => slide.classList.remove('active'));
   dots.forEach(dot => dot.classList.remove('active'));
-  
-  // Add active class to current slide and dot
+
   slides[index].classList.add('active');
   dots[index].classList.add('active');
 }
 
-function nextSlide() {
-  currentSlide = (currentSlide + 1) % totalSlides;
-  showSlide(currentSlide);
+function nextHeroSlide() {
+  const slides = document.querySelectorAll('.hero-slide');
+  currentSlide = (currentSlide + 1) % slides.length;
+  showHeroSlide(currentSlide);
 }
 
-// Auto-advance slides every 5 seconds
-let slideInterval = setInterval(nextSlide, 5000);
+function initHeroSlider() {
+  const heroSlider = document.getElementById('hero-slider');
+  const dots = document.querySelectorAll('.hero-dot');
+  if (!heroSlider || dots.length === 0) return;
 
-// Pause slider on hover
-const heroSlider = document.getElementById('hero-slider');
-if (heroSlider) {
-  heroSlider.addEventListener('mouseenter', () => {
-    clearInterval(slideInterval);
-  });
+  showHeroSlide(currentSlide);
+  slideInterval = setInterval(nextHeroSlide, 5000);
 
-  heroSlider.addEventListener('mouseleave', () => {
-    slideInterval = setInterval(nextSlide, 5000);
-  });
-}
+  heroSlider.addEventListener('mouseenter', () => clearInterval(slideInterval));
+  heroSlider.addEventListener('mouseleave', () => slideInterval = setInterval(nextHeroSlide, 5000));
 
-// Dot navigation
-dots.forEach((dot, index) => {
-  dot.addEventListener('click', () => {
-    currentSlide = index;
-    showSlide(currentSlide);
-    // Restart interval after manual selection
-    clearInterval(slideInterval);
-    slideInterval = setInterval(nextSlide, 5000);
-  });
-});
-
-// ===== Statistics Counter Animation =====
-function animateCounters() {
-  const counters = document.querySelectorAll('.stat-number');
-  
-  const observerOptions = {
-    threshold: 0.5,
-    rootMargin: '0px 0px -50px 0px'
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
-        const counter = entry.target;
-        const target = parseInt(counter.getAttribute('data-target'));
-        const duration = 2000; // 2 seconds
-        const increment = target / (duration / 16); // 60fps
-        let current = 0;
-        
-        counter.classList.add('animated'); // Prevent re-animation
-        
-        const updateCounter = () => {
-          if (current < target) {
-            current += increment;
-            counter.textContent = Math.floor(current).toLocaleString();
-            requestAnimationFrame(updateCounter);
-          } else {
-            counter.textContent = target.toLocaleString();
-          }
-        };
-        
-        updateCounter();
-      }
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      currentSlide = index;
+      showHeroSlide(currentSlide);
+      clearInterval(slideInterval);
+      slideInterval = setInterval(nextHeroSlide, 5000);
     });
-  }, observerOptions);
-
-  counters.forEach(counter => {
-    observer.observe(counter);
   });
 }
 
-// ===== Statistics Items Animation =====
-function initStatisticsAnimation() {
-  const statItems = document.querySelectorAll('.stat-item');
-  
-  const observerOptions = {
-    threshold: 0.2,
-    rootMargin: '0px 0px -30px 0px'
-  };
+// ===== News Slider =====
+function initNewsSlider() {
+  const newsSlider = document.getElementById('news-slider');
+  const newsSlides = document.querySelectorAll('.news-slide');
+  const newsPrevBtn = document.getElementById('news-prev');
+  const newsNextBtn = document.getElementById('news-next');
+  const newsIndicatorsContainer = document.getElementById('news-indicators');
+  if (!newsSlider || newsSlides.length === 0) return;
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }, index * 200);
-      }
-    });
-  }, observerOptions);
+  const slidesToShow = 4;
+  const totalNewsSlides = newsSlides.length;
+  const maxSlideIndex = Math.max(0, totalNewsSlides - slidesToShow);
 
-  statItems.forEach((item) => {
-    item.style.opacity = '0';
-    item.style.transform = 'translateY(30px)';
-    item.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-    observer.observe(item);
-  });
-}
+  function updateNewsSlider() {
+    const slideWidth = newsSlides[0].offsetWidth;
+    const gap = 20;
+    const translateX = -(currentNewsSlide * (slideWidth + gap));
+    newsSlider.style.transform = `translateX(${translateX}px)`;
+    updateNewsIndicators();
+    updateNewsNavButtons();
+  }
 
-// ===== Department Panels Animation =====
-function initDepartmentPanels() {
-  const departmentPanels = document.querySelectorAll('.department-panel');
-  
-  // Add entrance animation
-  const observerOptions = {
-    threshold: 0.2,
-    rootMargin: '0px 0px -50px 0px'
-  };
+  function nextNewsSlide() {
+    currentNewsSlide = (currentNewsSlide >= maxSlideIndex) ? 0 : currentNewsSlide + 1;
+    updateNewsSlider();
+  }
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }, index * 200);
-      }
-    });
-  }, observerOptions);
+  function prevNewsSlide() {
+    currentNewsSlide = (currentNewsSlide <= 0) ? maxSlideIndex : currentNewsSlide - 1;
+    updateNewsSlider();
+  }
 
-  departmentPanels.forEach((panel) => {
-    panel.style.opacity = '0';
-    panel.style.transform = 'translateY(30px)';
-    panel.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(panel);
-  });
-}
+  function updateNewsNavButtons() {
+    if (newsPrevBtn) newsPrevBtn.disabled = currentNewsSlide === 0;
+    if (newsNextBtn) newsNextBtn.disabled = currentNewsSlide >= maxSlideIndex;
+  }
 
-// ===== Facebook Posts Animation =====
-function initFacebookPosts() {
-  const facebookPosts = document.querySelectorAll('.facebook-post');
-  
-  // Add entrance animation
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -30px 0px'
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }, index * 300);
-      }
-    });
-  }, observerOptions);
-
-  facebookPosts.forEach((post) => {
-    post.style.opacity = '0';
-    post.style.transform = 'translateY(40px)';
-    post.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-    observer.observe(post);
-  });
-}
-
-// ===== Alumni Testimonials Staggered Animation =====
-function initAlumniTestimonials() {
-  const testimonials = document.querySelectorAll('.alumni-testimonial');
-  
-  const observerOptions = {
-    threshold: 0.2,
-    rootMargin: '0px 0px -20px 0px'
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateX(0) scale(1)';
-        }, index * 150);
-      }
-    });
-  }, observerOptions);
-
-  testimonials.forEach((testimonial, index) => {
-    testimonial.style.opacity = '0';
-    testimonial.style.transform = `translateX(${index % 2 === 0 ? '-20px' : '20px'}) scale(0.95)`;
-    testimonial.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(testimonial);
-  });
-}
-
-// ===== Enhanced fade-in for sections =====
-const sections = document.querySelectorAll('.facebook-section, .departments-showcase, .news-section, .statistics-section');
-
-function fadeInSections() {
-  sections.forEach(section => {
-    const rect = section.getBoundingClientRect();
-    if (rect.top < window.innerHeight - 50) {
-      section.style.opacity = 1;
-      section.style.transform = 'translateY(0)';
+  function createNewsIndicators() {
+    if (!newsIndicatorsContainer) return;
+    newsIndicatorsContainer.innerHTML = '';
+    for (let i = 0; i <= maxSlideIndex; i++) {
+      const indicator = document.createElement('button');
+      indicator.classList.add('news-indicator');
+      indicator.addEventListener('click', () => {
+        currentNewsSlide = i;
+        updateNewsSlider();
+        clearInterval(newsSlideInterval);
+        newsSlideInterval = setInterval(nextNewsSlide, 8000);
+      });
+      newsIndicatorsContainer.appendChild(indicator);
     }
+  }
+
+  function updateNewsIndicators() {
+    const indicators = document.querySelectorAll('.news-indicator');
+    indicators.forEach((indicator, index) => {
+      indicator.classList.toggle('active', index === currentNewsSlide);
+    });
+  }
+
+  createNewsIndicators();
+  updateNewsSlider();
+  if (newsPrevBtn) newsPrevBtn.addEventListener('click', prevNewsSlide);
+  if (newsNextBtn) newsNextBtn.addEventListener('click', nextNewsSlide);
+
+  newsSlideInterval = setInterval(nextNewsSlide, 8000);
+
+  newsSlider.addEventListener('mouseenter', () => clearInterval(newsSlideInterval));
+  newsSlider.addEventListener('mouseleave', () => newsSlideInterval = setInterval(nextNewsSlide, 8000));
+
+  // Touch support
+  let startX = 0, isDragging = false;
+  newsSlider.addEventListener('touchstart', e => { startX = e.touches[0].clientX; isDragging = true; clearInterval(newsSlideInterval); });
+  newsSlider.addEventListener('touchend', e => {
+    if (!isDragging) return;
+    const deltaX = startX - e.changedTouches[0].clientX;
+    if (Math.abs(deltaX) > 50) deltaX > 0 ? nextNewsSlide() : prevNewsSlide();
+    isDragging = false;
+    newsSlideInterval = setInterval(nextNewsSlide, 8000);
+  });
+
+  window.addEventListener('resize', updateNewsSlider);
+}
+
+// ===== Dropdowns =====
+function initDropdownAccessibility() {
+  const dropdowns = document.querySelectorAll('.dropdown');
+
+  dropdowns.forEach(dropdown => {
+    const button = dropdown.querySelector('.dropbtn');
+    const content = dropdown.querySelector('.dropdown-content');
+    if (!button || !content) return;
+
+    dropdown.addEventListener('mouseenter', () => {
+      content.style.opacity = '1';
+      content.style.visibility = 'visible';
+      content.style.pointerEvents = 'auto';
+    });
+    dropdown.addEventListener('mouseleave', () => {
+      content.style.opacity = '0';
+      content.style.visibility = 'hidden';
+      content.style.pointerEvents = 'none';
+    });
+
+    button.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const isOpen = content.style.visibility === 'visible';
+        content.style.opacity = isOpen ? '0' : '1';
+        content.style.visibility = isOpen ? 'hidden' : 'visible';
+        content.style.pointerEvents = isOpen ? 'none' : 'auto';
+      }
+    });
+  });
+
+  document.addEventListener('click', e => {
+    dropdowns.forEach(dropdown => {
+      const content = dropdown.querySelector('.dropdown-content');
+      if (!dropdown.contains(e.target)) {
+        content.style.opacity = '0';
+        content.style.visibility = 'hidden';
+        content.style.pointerEvents = 'none';
+      }
+    });
   });
 }
 
-// ===== Enhanced Header Control =====
-const headerContainer = document.getElementById('header-container');
-const headerHeight = headerContainer.offsetHeight;
-let lastScrollY = window.scrollY;
-let ticking = false;
-
+// ===== Header Scroll =====
 function updateHeader() {
+  const header = document.getElementById('header-container');
+  if (!header) return;
   const scrollY = window.scrollY;
   const scrollDirection = scrollY > lastScrollY ? 'down' : 'up';
-  
-  if (scrollY <= headerHeight) {
-    // At top of page - show normal header
-    headerContainer.classList.remove('hidden', 'show-on-scroll-up');
-  } else if (scrollDirection === 'down' && scrollY > lastScrollY + 5) {
-    // Scrolling down - hide header (with threshold to avoid micro-movements)
-    headerContainer.classList.add('hidden');
-    headerContainer.classList.remove('show-on-scroll-up');
+
+  if (scrollY <= headerHeight) header.classList.remove('hidden', 'show-on-scroll-up');
+  else if (scrollDirection === 'down' && scrollY > lastScrollY + 5) {
+    header.classList.add('hidden');
+    header.classList.remove('show-on-scroll-up');
   } else if (scrollDirection === 'up' && lastScrollY > scrollY + 5) {
-    // Scrolling up - show header with slide down animation
-    headerContainer.classList.remove('hidden');
-    headerContainer.classList.add('show-on-scroll-up');
+    header.classList.remove('hidden');
+    header.classList.add('show-on-scroll-up');
   }
-  
+
   lastScrollY = scrollY;
   ticking = false;
 }
@@ -246,200 +200,111 @@ function requestHeaderUpdate() {
   }
 }
 
-window.addEventListener('scroll', requestHeaderUpdate);
+// ===== Search Toggle =====
+function initSearchToggle() {
+  const searchIcon = document.getElementById('search-icon');
+  const searchInput = document.getElementById('search-input');
+  if (!searchIcon || !searchInput) return;
 
-// ===== Enhanced Search bar toggle =====
-const searchIcon = document.getElementById('search-icon');
-const searchInput = document.getElementById('search-input');
-
-if (searchIcon && searchInput) {
   searchIcon.addEventListener('click', () => {
     searchInput.classList.toggle('active');
-    if (searchInput.classList.contains('active')) {
-      searchInput.focus();
-    } else {
-      searchInput.blur();
-      searchInput.value = '';
-    }
+    if (searchInput.classList.contains('active')) searchInput.focus();
+    else { searchInput.blur(); searchInput.value = ''; }
   });
 
-  // Close search when clicking outside
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', e => {
     if (!searchIcon.contains(e.target) && !searchInput.contains(e.target)) {
       searchInput.classList.remove('active');
       searchInput.value = '';
     }
   });
 }
+function animateCounters() {
+  const counters = document.querySelectorAll('.stat-number');
+  if (!counters.length) return;
 
-// ===== Enhanced News Section Interactions =====
-function initNewsSection() {
-  const newsItems = document.querySelectorAll('.news-item');
-  
-  newsItems.forEach(item => {
-    item.addEventListener('mouseenter', () => {
-      // Optional: Pause any auto-scrolling if you add it later
-      item.style.zIndex = '10';
-    });
-
-    item.addEventListener('mouseleave', () => {
-      item.style.zIndex = '1';
-    });
-  });
-}
-
-// ===== Smooth Scrolling for Anchor Links =====
-function initSmoothScrolling() {
-  const links = document.querySelectorAll('a[href^="#"]');
-  
-  links.forEach(link => {
-    link.addEventListener('click', (e) => {
-      const href = link.getAttribute('href');
-      if (href === '#') return;
-      
-      e.preventDefault();
-      const target = document.querySelector(href);
-      
-      if (target) {
-        const offsetTop = target.getBoundingClientRect().top + window.pageYOffset - headerContainer.offsetHeight;
-        
-        window.scrollTo({
-          top: offsetTop,
-          behavior: 'smooth'
-        });
-      }
-    });
-  });
-}
-
-// ===== Improved Dropdown Accessibility =====
-function initDropdownAccessibility() {
-  const dropdowns = document.querySelectorAll('.dropdown');
-  
-  dropdowns.forEach(dropdown => {
-    const button = dropdown.querySelector('.dropbtn');
-    const content = dropdown.querySelector('.dropdown-content');
-    
-    if (button && content) {
-      // Keyboard navigation
-      button.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          content.style.opacity = content.style.opacity === '1' ? '0' : '1';
-          content.style.visibility = content.style.visibility === 'visible' ? 'hidden' : 'visible';
-          content.style.pointerEvents = content.style.pointerEvents === 'auto' ? 'none' : 'auto';
-        }
-      });
-
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!dropdown.contains(e.target)) {
-          content.style.opacity = '0';
-          content.style.visibility = 'hidden';
-          content.style.pointerEvents = 'none';
-        }
-      });
-    }
-  });
-}
-
-// ===== Facebook Post Interactions =====
-function initFacebookInteractions() {
-  const facebookPosts = document.querySelectorAll('.facebook-post');
-  
-  facebookPosts.forEach(post => {
-    // Add subtle hover effects
-    post.addEventListener('mouseenter', () => {
-      const profilePic = post.querySelector('.profile-pic');
-      const facebookIcon = post.querySelector('.facebook-icon');
-      
-      if (profilePic) {
-        profilePic.style.transform = 'scale(1.1)';
-        profilePic.style.transition = 'transform 0.3s ease';
-      }
-      
-      if (facebookIcon) {
-        facebookIcon.style.transform = 'scale(1.2)';
-        facebookIcon.style.transition = 'transform 0.3s ease';
-      }
-    });
-
-    post.addEventListener('mouseleave', () => {
-      const profilePic = post.querySelector('.profile-pic');
-      const facebookIcon = post.querySelector('.facebook-icon');
-      
-      if (profilePic) {
-        profilePic.style.transform = 'scale(1)';
-      }
-      
-      if (facebookIcon) {
-        facebookIcon.style.transform = 'scale(1)';
-      }
-    });
-  });
-}
-
-// ===== Testimonial Quote Animation =====
-function initTestimonialQuotes() {
-  const quoteMarks = document.querySelectorAll('.quote-mark');
-  
   const observerOptions = {
     threshold: 0.5,
-    rootMargin: '0px 0px -10px 0px'
+    rootMargin: '0px 0px -50px 0px'
   };
 
-  const observer = new IntersectionObserver((entries) => {
+  const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.animation = 'quoteGlow 2s ease-in-out';
+      if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+        const counter = entry.target;
+        const target = parseInt(counter.getAttribute('data-target'), 10);
+        const duration = 2000;
+        const increment = target / (duration / 16); // 60fps
+        let current = 0;
+
+        counter.classList.add('animated');
+
+        const update = () => {
+          current += increment;
+          if (current < target) {
+            counter.textContent = Math.floor(current).toLocaleString();
+            requestAnimationFrame(update);
+          } else {
+            counter.textContent = target.toLocaleString();
+          }
+        };
+        update();
       }
     });
   }, observerOptions);
 
-  quoteMarks.forEach(quote => {
-    observer.observe(quote);
-  });
-
-  // Add CSS animation for quote glow
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes quoteGlow {
-      0%, 100% { color: #ed1b24; text-shadow: none; }
-      50% { color: #ff4b20; text-shadow: 0 0 10px rgba(237, 27, 36, 0.3); }
-    }
-  `;
-  document.head.appendChild(style);
+  counters.forEach(counter => observer.observe(counter));
 }
 
-// ===== Initialize everything when DOM is loaded =====
+// Ensure this runs after window load to catch layout
+window.addEventListener('load', () => {
+  animateCounters();
+});
+
+
+// ===== Fade-In Sections =====
+function fadeInSections() {
+  const sections = document.querySelectorAll('.facebook-section, .departments-showcase, .news-section, .statistics-section');
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 50) {
+      section.style.opacity = 1;
+      section.style.transform = 'translateY(0)';
+    }
+  });
+}
+
+// ===== DOMContentLoaded Initialization =====
 document.addEventListener('DOMContentLoaded', () => {
-  initDepartmentPanels();
-  initNewsSection();
-  initSmoothScrolling();
+  headerHeight = document.getElementById('header-container')?.offsetHeight || 0;
+  lastScrollY = window.scrollY;
+
+  initHeroSlider();
+  initNewsSlider();
   initDropdownAccessibility();
-  initFacebookPosts();
-  initAlumniTestimonials();
-  initFacebookInteractions();
-  initTestimonialQuotes();
+  initSearchToggle();
+
+  // Add your other initialization functions here:
+  // initDepartmentPanels();
+  // initNewsSection();
+  // initSmoothScrolling();
+  // initFacebookPosts();
+  // initAlumniTestimonials();
+  // initFacebookInteractions();
+  // initTestimonialQuotes();
   initStatisticsAnimation();
   animateCounters();
 });
 
-// ===== Initialize on window load =====
-window.addEventListener('load', () => { 
+// ===== Window Events =====
+window.addEventListener('scroll', () => {
   fadeInSections();
+  requestHeaderUpdate();
 });
 
-// ===== Fade in sections on scroll =====
-window.addEventListener('scroll', () => { 
-  fadeInSections();
-});
-
-// ===== Handle window resize =====
 window.addEventListener('resize', () => {
-  // Recalculate header height on resize
-  const newHeaderHeight = headerContainer.offsetHeight;
-  if (newHeaderHeight !== headerHeight) {
-    headerHeight = newHeaderHeight;
-  }
+  const header = document.getElementById('header-container');
+  if (header) headerHeight = header.offsetHeight;
+  fadeInSections();
 });
+window.addEventListener('load', fadeInSections);
