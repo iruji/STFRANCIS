@@ -261,7 +261,6 @@ window.addEventListener('load', () => {
   animateCounters();
 });
 
-
 // ===== Fade-In Sections =====
 function fadeInSections() {
   const sections = document.querySelectorAll('.facebook-section, .departments-showcase, .news-section, .statistics-section');
@@ -308,3 +307,24 @@ window.addEventListener('resize', () => {
   fadeInSections();
 });
 window.addEventListener('load', fadeInSections);
+
+// Select all elements you want to fade in
+const fadeInElements = document.querySelectorAll('.fade-in');
+
+const observerOptions = {
+  threshold: 0.5, // Triggers when 50% of the element is visible
+  rootMargin: '0px 0px -50px 0px' // Optional: triggers slightly before fully visible
+};
+
+const fadeInObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible'); // Trigger CSS animation
+      observer.unobserve(entry.target); // Stop observing after fade-in
+    }
+  });
+}, observerOptions);
+
+// Observe all fade-in elements
+fadeInElements.forEach(el => fadeInObserver.observe(el));
+
