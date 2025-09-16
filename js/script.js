@@ -173,18 +173,51 @@ function initDropdownAccessibility() {
   });
 }
 
-// ===== Header Scroll =====
+// ===== Header Scroll (Fixed Version) =====
 function updateHeader() {
   const header = document.getElementById('header-container');
   if (!header) return;
+  
   const scrollY = window.scrollY;
-  const scrollDirection = scrollY > lastScrollY ? 'down' : 'up';
-
-  if (scrollY <= headerHeight) header.classList.remove('hidden', 'show-on-scroll-up');
-  else if (scrollDirection === 'down' && scrollY > lastScrollY + 5) {
+  const scrollDifference = scrollY - lastScrollY;
+  
+  // If we're at the top, always show header
+  if (scrollY <= headerHeight) {
+    header.classList.remove('hidden', 'show-on-scroll-up');
+  } 
+  // If scrolling down and moved more than 5px, hide header
+  else if (scrollDifference > 5) {
     header.classList.add('hidden');
     header.classList.remove('show-on-scroll-up');
-  } else if (scrollDirection === 'up' && lastScrollY > scrollY + 5) {
+  } 
+  // If scrolling up and moved more than 5px, show header
+  else if (scrollDifference < -5) {
+    header.classList.remove('hidden');
+    header.classList.add('show-on-scroll-up');
+  }
+
+  lastScrollY = scrollY;
+  ticking = false;
+}
+
+// Alternative simpler version if the above doesn't work:
+function updateHeaderSimple() {
+  const header = document.getElementById('header-container');
+  if (!header) return;
+  
+  const scrollY = window.scrollY;
+  
+  // At the top, always show
+  if (scrollY <= headerHeight) {
+    header.classList.remove('hidden', 'show-on-scroll-up');
+  }
+  // Scrolling down - hide header
+  else if (scrollY > lastScrollY && scrollY > headerHeight) {
+    header.classList.add('hidden');
+    header.classList.remove('show-on-scroll-up');
+  }
+  // Scrolling up - show header
+  else if (scrollY < lastScrollY) {
     header.classList.remove('hidden');
     header.classList.add('show-on-scroll-up');
   }
