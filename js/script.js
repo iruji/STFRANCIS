@@ -252,6 +252,7 @@ function initSearchToggle() {
     }
   });
 }
+
 function animateCounters() {
   const counters = document.querySelectorAll('.stat-number');
   if (!counters.length) return;
@@ -289,11 +290,6 @@ function animateCounters() {
   counters.forEach(counter => observer.observe(counter));
 }
 
-// Ensure this runs after window load to catch layout
-window.addEventListener('load', () => {
-  animateCounters();
-});
-
 // ===== Fade-In Sections =====
 function fadeInSections() {
   const sections = document.querySelectorAll('.facebook-section, .departments-showcase, .news-section, .statistics-section');
@@ -306,6 +302,52 @@ function fadeInSections() {
   });
 }
 
+// ===== Improved Fade-In Observer =====
+function initFadeInObserver() {
+  const fadeInElements = document.querySelectorAll('.fade-in');
+  
+  if (!fadeInElements.length) return;
+
+  // Much more forgiving observer options
+  const observerOptions = {
+    threshold: 0.5, // Triggers as soon as ANY part of the element is visible
+    rootMargin: '200px 0px 200px 0px' // Triggers 200px before AND after the element enters viewport
+  };
+
+  const fadeInObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Don't unobserve immediately - let it stay for potential re-triggering
+        // observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  // Observe all fade-in elements
+  fadeInElements.forEach(el => {
+    // Check if element is already in viewport on page load
+    const rect = el.getBoundingClientRect();
+    const isInViewport = (
+      rect.top >= -200 && 
+      rect.bottom <= window.innerHeight + 200
+    );
+    
+    if (isInViewport) {
+      // If already in viewport, show immediately
+      el.classList.add('visible');
+    }
+    
+    fadeInObserver.observe(el);
+  });
+}
+
+// ===== Statistics Animation =====
+function initStatisticsAnimation() {
+  // This function can be called if needed for statistics
+  animateCounters();
+}
+
 // ===== DOMContentLoaded Initialization =====
 document.addEventListener('DOMContentLoaded', () => {
   headerHeight = document.getElementById('header-container')?.offsetHeight || 0;
@@ -315,17 +357,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initNewsSlider();
   initDropdownAccessibility();
   initSearchToggle();
-
-  // Add your other initialization functions here:
-  // initDepartmentPanels();
-  // initNewsSection();
-  // initSmoothScrolling();
-  // initFacebookPosts();
-  // initAlumniTestimonials();
-  // initFacebookInteractions();
-  // initTestimonialQuotes();
   initStatisticsAnimation();
   animateCounters();
+  
+  // Initialize the improved fade-in observer
+  initFadeInObserver();
 });
 
 // ===== Window Events =====
@@ -339,25 +375,17 @@ window.addEventListener('resize', () => {
   if (header) headerHeight = header.offsetHeight;
   fadeInSections();
 });
-window.addEventListener('load', fadeInSections);
 
-// Select all elements you want to fade in
-const fadeInElements = document.querySelectorAll('.fade-in');
-
-const observerOptions = {
-  threshold: 0.5, // Triggers when 50% of the element is visible
-  rootMargin: '0px 0px -50px 0px' // Optional: triggers slightly before fully visible
-};
-
-const fadeInObserver = new IntersectionObserver((entries, observer) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible'); // Trigger CSS animation
-      observer.unobserve(entry.target); // Stop observing after fade-in
+window.addEventListener('load', () => {
+  fadeInSections();
+  animateCounters();
+  
+  // Re-check fade-in elements after full page load
+  const fadeInElements = document.querySelectorAll('.fade-in');
+  fadeInElements.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight + 200 && rect.bottom > -200) {
+      el.classList.add('visible');
     }
   });
-}, observerOptions);
-
-// Observe all fade-in elements
-fadeInElements.forEach(el => fadeInObserver.observe(el));
-
+});

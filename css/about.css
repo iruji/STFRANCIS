@@ -1,0 +1,215 @@
+/* About Hero Section */
+.about-hero {
+    background: linear-gradient(135deg, #ed1b24 0%, #ff4b20 100%);
+    padding: 40px 0; /* Reduced from 60px */
+    margin-top: 140px;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.about-hero-content {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0 40px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.about-hero h1 {
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 3rem; /* Reduced from 3.5rem */
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    letter-spacing: 1px;
+}
+
+/* Updated About Section Styles */
+.about-us {
+    padding: 80px 20px;
+    background-color: #f9f9f9;
+    font-family: 'Poppins', sans-serif; /* Apply Poppins to entire section */
+}
+
+.about-container {
+    max-width: 1500px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+}
+
+.about-content {
+    padding-right: 40px;
+}
+
+.about-header {
+    text-align: left;
+    margin-bottom: 40px;
+}
+
+.small-title {
+    display: block;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #555;
+    margin-bottom: 10px;
+    font-family: 'Poppins', sans-serif; /* Explicitly set Poppins */
+}
+
+.main-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 0;
+    color: #333;
+    font-family: 'Poppins', sans-serif; /* Explicitly set Poppins */
+}
+
+.title-divider {
+    width: 80px;
+    height: 4px;
+    background-color: #ed1b24;
+    border: none;
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+.about-text {
+    font-family: 'Poppins', sans-serif; /* Apply Poppins to text container */
+}
+
+.about-text p {
+    text-align: justify;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: #555;
+    font-family: 'Poppins', sans-serif; /* Explicitly set Poppins for paragraphs */
+    font-weight: 400; /* Regular weight for readability */
+}
+
+.about-images {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.about-image {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-image:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+.about-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .about-container {
+        gap: 40px;
+    }
+    
+    .about-content {
+        padding-right: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-hero {
+        padding: 30px 0; /* Smaller on tablet */
+    }
+    
+    .about-hero h1 {
+        font-size: 2.5rem;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .about-us {
+        padding: 120px 15px 60px 15px;
+    }
+    
+    .about-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .about-content {
+        padding-right: 0;
+    }
+    
+    .main-title {
+        font-size: 2.5rem;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .about-text p {
+        font-size: 0.95rem;
+        text-align: left;
+        font-family: 'Poppins', sans-serif;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-hero {
+        padding: 25px 0; /* Even smaller on mobile */
+    }
+    
+    .about-hero h1 {
+        font-size: 2rem;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .about-us {
+        padding: 110px 10px 50px 10px;
+    }
+    
+    .main-title {
+        font-size: 2rem;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .about-text p {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .about-images {
+        gap: 15px;
+    }
+}
+
+/* Global Poppins font application for consistency */
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Override for specific elements that might need different fonts */
+code, pre {
+    font-family: 'Courier New', monospace;
+}
