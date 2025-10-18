@@ -231,6 +231,51 @@
             </div>
         </div>
     </footer>
+<!-- Updated Chatbot HTML Structure for Morphing -->
+<div id="chatbot-wrapper">
+    <!-- Morphing Chat Head (contains everything) -->
+    <div id="chatbot-header">
+        <!-- Message Icon (visible when closed) -->
+        <svg class="message-icon" viewBox="0 0 24 24">
+            <path d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4C22,2.89 21.1,2 20,2Z"/>
+        </svg>
+        <span id="new-msg-badge">!</span>
+        
+        <!-- Chat Content (visible when morphed) -->
+        <div class="chat-content">
+            <div class="chat-header-bar">
+                <div class="chat-profile">
+                    <div class="profile-avatar">J</div>
+                    <div class="profile-info">
+                        <div class="chat-title">J.A.R.V.I.S.</div>
+                        <div class="profile-status">
+                            <span class="status-dot"></span>
+                            Online Now
+                        </div>
+                    </div>
+                </div>
+                <button class="close-btn">×</button>
+            </div>
+            
+            <div id="chatArea">
+                <!-- Messages will be populated by JavaScript -->
+            </div>
+            
+            <div class="input-area">
+                <input type="text" id="userInput" placeholder="Type your message..." />
+                <button class="send-btn">
+                    <svg class="send-icon" viewBox="0 0 24 24">
+                        <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Link CSS and JS -->
+<link rel="stylesheet" href="css/chatbot.css">
+<script src="js/chatbot.js"></script>
+
 
     <!-- JavaScript for header interactions -->
     <script src="js/script.js"></script>

@@ -389,3 +389,218 @@ window.addEventListener('load', () => {
     }
   });
 });
+// ========================================
+// FACEBOOK EMBEDDED POSTS SLIDER - TWO CARDS AT A TIME
+// Replace the Facebook slider section in your script.js with this
+// ========================================
+
+let fbCurrentSlide = 0;
+let fbTotalSlides = 0;
+let fbSlidesToShow = 2; // Show 2 cards at a time on desktop
+let fbMaxSlideIndex = 0;
+let fbAutoplayInterval;
+
+// Initialize Facebook slider when page loads
+window.addEventListener('load', function() {
+  initializeFacebookSlider();
+});
+
+// Handle window resize
+window.addEventListener('resize', function() {
+  updateFbSlidesToShow();
+  updateFacebookSlider();
+});
+
+function updateFbSlidesToShow() {
+  // Show 1 card on mobile/tablet, 2 on desktop
+  if (window.innerWidth <= 968) {
+    fbSlidesToShow = 1;
+  } else {
+    fbSlidesToShow = 2;
+  }
+  
+  const slides = document.querySelectorAll('.facebook-slide');
+  fbTotalSlides = slides.length;
+  fbMaxSlideIndex = Math.max(0, Math.ceil(fbTotalSlides / fbSlidesToShow) - 1);
+}
+
+function initializeFacebookSlider() {
+  const slides = document.querySelectorAll('.facebook-slide');
+  fbTotalSlides = slides.length;
+  
+  if (fbTotalSlides === 0) return; // Exit if no slides found
+  
+  // Determine how many slides to show based on screen size
+  updateFbSlidesToShow();
+  
+  // Show all slides (CSS will handle the layout)
+  slides.forEach((slide) => {
+    slide.style.display = 'flex';
+  });
+  
+  // Create indicators based on number of "pages"
+  const indicatorsContainer = document.getElementById('facebook-indicators');
+  if (indicatorsContainer) {
+    indicatorsContainer.innerHTML = ''; // Clear existing
+    for (let i = 0; i <= fbMaxSlideIndex; i++) {
+      const indicator = document.createElement('button');
+      indicator.className = 'fb-indicator' + (i === 0 ? ' active' : '');
+      indicator.onclick = () => fbGoToSlide(i);
+      indicatorsContainer.appendChild(indicator);
+    }
+  }
+
+  // Navigation buttons
+  const prevBtn = document.getElementById('fb-prev');
+  const nextBtn = document.getElementById('fb-next');
+  
+  if (prevBtn) prevBtn.addEventListener('click', fbPrevSlide);
+  if (nextBtn) nextBtn.addEventListener('click', fbNextSlide);
+
+  // Initialize slider position
+  updateFacebookSlider();
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') fbPrevSlide();
+    if (e.key === 'ArrowRight') fbNextSlide();
+  });
+
+  // Pause autoplay on hover
+  const sliderWrapper = document.querySelector('.facebook-slider-wrapper');
+  if (sliderWrapper) {
+    sliderWrapper.addEventListener('mouseenter', fbStopAutoplay);
+    sliderWrapper.addEventListener('mouseleave', fbStartAutoplay);
+  }
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const sliderContainer = document.querySelector('.facebook-slider-container');
+  
+  if (sliderContainer) {
+    sliderContainer.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    sliderContainer.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const swipeThreshold = 50;
+      
+      if (touchEndX < touchStartX - swipeThreshold) {
+        fbNextSlide();
+      } else if (touchEndX > touchStartX + swipeThreshold) {
+        fbPrevSlide();
+      }
+    });
+  }
+
+  // Start autoplay after a short delay
+  setTimeout(() => {
+    fbStartAutoplay();
+  }, 2000);
+}
+
+function updateFacebookSlider() {
+  const slider = document.getElementById('facebook-slider');
+  const slides = document.querySelectorAll('.facebook-slide');
+  const prevBtn = document.getElementById('fb-prev');
+  const nextBtn = document.getElementById('fb-next');
+  
+  if (!slider || slides.length === 0) return;
+  
+  // Calculate exact pixel offset based on slide width
+  const slideWidth = slides[0].getBoundingClientRect().width;
+  const offset = -(fbCurrentSlide * fbSlidesToShow * slideWidth);
+  
+  slider.style.transform = `translateX(${offset}px)`;
+  
+  // Update indicators
+  const indicators = document.querySelectorAll('.fb-indicator');
+  indicators.forEach((ind, i) => {
+    ind.classList.toggle('active', i === fbCurrentSlide);
+  });
+  
+  // Disable/enable navigation buttons
+  if (prevBtn) {
+    prevBtn.disabled = fbCurrentSlide === 0;
+  }
+  if (nextBtn) {
+    nextBtn.disabled = fbCurrentSlide >= fbMaxSlideIndex;
+  }
+}
+
+function fbGoToSlide(index) {
+  // Ensure index is within bounds
+  fbCurrentSlide = Math.max(0, Math.min(index, fbMaxSlideIndex));
+  updateFacebookSlider();
+}
+
+function fbNextSlide() {
+  if (fbTotalSlides === 0) return;
+  
+  if (fbCurrentSlide < fbMaxSlideIndex) {
+    fbCurrentSlide++;
+    updateFacebookSlider();
+    fbResetAutoplay();
+  }
+}
+
+function fbPrevSlide() {
+  if (fbTotalSlides === 0) return;
+  
+  if (fbCurrentSlide > 0) {
+    fbCurrentSlide--;
+    updateFacebookSlider();
+    fbResetAutoplay();
+  }
+}
+
+function fbStartAutoplay() {
+  if (fbTotalSlides === 0) return;
+  fbStopAutoplay();
+  fbAutoplayInterval = setInterval(() => {
+    // Auto-advance or loop back to start
+    if (fbCurrentSlide < fbMaxSlideIndex) {
+      fbNextSlide();
+    } else {
+      fbGoToSlide(0);
+    }
+  }, 5000); // 5 seconds
+}
+
+function fbStopAutoplay() {
+  if (fbAutoplayInterval) {
+    clearInterval(fbAutoplayInterval);
+  }
+}
+
+function fbResetAutoplay() {
+  fbStopAutoplay();
+  fbStartAutoplay();
+}
+
+// Pause autoplay when page is hidden
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    fbStopAutoplay();
+  } else {
+    fbStartAutoplay();
+  }
+});
+
+// Facebook SDK callback - hide loading when posts render
+window.fbAsyncInit = function() {
+  FB.Event.subscribe('xfbml.render', function() {
+    setTimeout(() => {
+      const loading = document.getElementById('fb-loading-overlay');
+      if (loading) loading.style.display = 'none';
+    }, 1000);
+  });
+};
+
+// Fallback: Hide loading after timeout
+setTimeout(() => {
+  const loading = document.getElementById('fb-loading-overlay');
+  if (loading) loading.style.display = 'none';
+}, 5000);
