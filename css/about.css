@@ -1,7 +1,7 @@
 /* About Hero Section */
 .about-hero {
     background: linear-gradient(135deg, #ed1b24 0%, #ff4b20 100%);
-    padding: 40px 0; /* Reduced from 60px */
+    padding: 40px 0;
     margin-top: 140px;
     position: relative;
     overflow: hidden;
@@ -31,7 +31,7 @@
 .about-hero h1 {
     color: white;
     font-family: 'Poppins', sans-serif;
-    font-size: 3rem; /* Reduced from 3.5rem */
+    font-size: 3rem;
     font-weight: 700;
     margin: 0;
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
@@ -42,7 +42,7 @@
 .about-us {
     padding: 80px 20px;
     background-color: #f9f9f9;
-    font-family: 'Poppins', sans-serif; /* Apply Poppins to entire section */
+    font-family: 'Poppins', sans-serif;
 }
 
 .about-container {
@@ -70,7 +70,7 @@
     letter-spacing: 2px;
     color: #555;
     margin-bottom: 10px;
-    font-family: 'Poppins', sans-serif; /* Explicitly set Poppins */
+    font-family: 'Poppins', sans-serif;
 }
 
 .main-title {
@@ -78,7 +78,7 @@
     font-weight: 700;
     margin: 0;
     color: #333;
-    font-family: 'Poppins', sans-serif; /* Explicitly set Poppins */
+    font-family: 'Poppins', sans-serif;
 }
 
 .title-divider {
@@ -91,7 +91,7 @@
 }
 
 .about-text {
-    font-family: 'Poppins', sans-serif; /* Apply Poppins to text container */
+    font-family: 'Poppins', sans-serif;
 }
 
 .about-text p {
@@ -100,8 +100,8 @@
     margin-bottom: 20px;
     font-size: 1rem;
     color: #555;
-    font-family: 'Poppins', sans-serif; /* Explicitly set Poppins for paragraphs */
-    font-weight: 400; /* Regular weight for readability */
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
 }
 
 .about-images {
@@ -128,6 +128,103 @@
     display: block;
 }
 
+/* Vision, Mission, Core Values Section */
+.vmv-section {
+    padding: 80px 20px;
+    background-color: #f9f9f9;
+    position: relative;
+    overflow: hidden;
+}
+
+.vmv-container {
+    max-width: 1500px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    position: relative;
+    z-index: 1;
+}
+
+.vmv-card {
+    background: white;
+    padding: 50px 35px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.vmv-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #ed1b24 0%, #ff4b20 100%);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+}
+
+.vmv-card:hover::before {
+    transform: scaleX(1);
+}
+
+.vmv-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 25px;
+    background: linear-gradient(135deg, #ed1b24 0%, #ff4b20 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.vmv-icon i {
+    font-size: 2rem;
+    color: white;
+    position: relative;
+    z-index: 1;
+}
+
+.vmv-card:hover .vmv-icon {
+    transform: rotate(360deg) scale(1.1);
+}
+
+.vmv-card h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ed1b24;
+    margin: 0 0 20px 0;
+    letter-spacing: 1px;
+}
+
+.vmv-card p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #555;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Global Poppins font application for consistency */
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Override for specific elements that might need different fonts */
+code, pre {
+    font-family: 'Courier New', monospace;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
     .about-container {
@@ -137,11 +234,19 @@
     .about-content {
         padding-right: 20px;
     }
+    
+    .vmv-container {
+        gap: 30px;
+    }
+    
+    .vmv-card {
+        padding: 40px 30px;
+    }
 }
 
 @media (max-width: 768px) {
     .about-hero {
-        padding: 30px 0; /* Smaller on tablet */
+        padding: 30px 0;
     }
     
     .about-hero h1 {
@@ -172,11 +277,37 @@
         text-align: left;
         font-family: 'Poppins', sans-serif;
     }
+    
+    .vmv-section {
+        padding: 60px 15px;
+    }
+    
+    .vmv-container {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .vmv-card {
+        padding: 35px 25px;
+    }
+    
+    .vmv-icon {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .vmv-icon i {
+        font-size: 1.75rem;
+    }
+    
+    .vmv-card h2 {
+        font-size: 1.3rem;
+    }
 }
 
 @media (max-width: 480px) {
     .about-hero {
-        padding: 25px 0; /* Even smaller on mobile */
+        padding: 25px 0;
     }
     
     .about-hero h1 {
@@ -202,14 +333,29 @@
     .about-images {
         gap: 15px;
     }
-}
-
-/* Global Poppins font application for consistency */
-* {
-    font-family: 'Poppins', sans-serif;
-}
-
-/* Override for specific elements that might need different fonts */
-code, pre {
-    font-family: 'Courier New', monospace;
+    
+    .vmv-section {
+        padding: 50px 10px;
+    }
+    
+    .vmv-card {
+        padding: 30px 20px;
+    }
+    
+    .vmv-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .vmv-icon i {
+        font-size: 1.5rem;
+    }
+    
+    .vmv-card h2 {
+        font-size: 1.2rem;
+    }
+    
+    .vmv-card p {
+        font-size: 0.9rem;
+    }
 }
