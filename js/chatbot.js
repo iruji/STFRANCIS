@@ -1,4 +1,4 @@
-// Morphing Chatbot JavaScript
+// Morphing Chatbot JavaScript - WITH STATE PERSISTENCE
 console.log("Morphing chatbot script loading...");
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -14,6 +14,102 @@ document.addEventListener('DOMContentLoaded', function() {
     const sendBtn = document.querySelector(".send-btn");
     
     let isChatOpen = false;
+
+    // ============================================
+    // CHAT PERSISTENCE FUNCTIONS
+    // ============================================
+    
+    /**
+     * Save a message to localStorage
+     */
+    function saveMessageToStorage(content, isUser) {
+        try {
+            let chatHistory = JSON.parse(localStorage.getItem('jarvis_chat_history') || '[]');
+            chatHistory.push({
+                content: content,
+                isUser: isUser,
+                timestamp: Date.now()
+            });
+            
+            // Keep only last 50 messages to avoid storage limits
+            if (chatHistory.length > 50) {
+                chatHistory = chatHistory.slice(-50);
+            }
+            
+            localStorage.setItem('jarvis_chat_history', JSON.stringify(chatHistory));
+        } catch (e) {
+            console.error('Error saving message to storage:', e);
+        }
+    }
+    
+    /**
+     * Load chat history from localStorage
+     */
+    function loadChatHistory() {
+        try {
+            const chatHistory = JSON.parse(localStorage.getItem('jarvis_chat_history') || '[]');
+            
+            // Clear current chat area
+            if (chatArea) {
+                chatArea.innerHTML = '';
+            }
+            
+            // Restore all messages
+            chatHistory.forEach(msg => {
+                const messageDiv = createMessage(msg.content, msg.isUser);
+                if (chatArea) {
+                    chatArea.appendChild(messageDiv);
+                }
+            });
+            
+            // Scroll to bottom
+            if (chatArea) {
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+            
+            console.log(`Loaded ${chatHistory.length} messages from history`);
+        } catch (e) {
+            console.error('Error loading chat history:', e);
+        }
+    }
+    
+    /**
+     * Clear chat history from localStorage
+     */
+    function clearChatHistory() {
+        try {
+            localStorage.removeItem('jarvis_chat_history');
+            console.log('Chat history cleared');
+        } catch (e) {
+            console.error('Error clearing chat history:', e);
+        }
+    }
+
+    /**
+     * NEW: Save chatbot open/closed state
+     */
+    function saveChatState(isOpen) {
+        try {
+            localStorage.setItem('jarvis_chat_open', isOpen ? 'true' : 'false');
+        } catch (e) {
+            console.error('Error saving chat state:', e);
+        }
+    }
+
+    /**
+     * NEW: Get chatbot open/closed state
+     */
+    function getChatState() {
+        try {
+            return localStorage.getItem('jarvis_chat_open') === 'true';
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // ============================================
+    // CHATBOT UI FUNCTIONS
+    // ============================================
 
     // Toggle chatbot with morphing animation
     function toggleChatbot() {
@@ -42,9 +138,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Blur input to prevent floating keyboard on mobile
             if (userInput) userInput.blur();
         }
+
+        // NEW: Save the open/closed state
+        saveChatState(isChatOpen);
     }
 
-    // NEW: Reset chat function
+    // Reset chat function - now clears localStorage too
     function resetChat() {
         console.log("Resetting chat...");
         
@@ -57,6 +156,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (userInput) {
             userInput.value = '';
         }
+        
+        // Clear chat history from localStorage
+        clearChatHistory();
+        
+        // NEW: Clear chat state (reset to closed)
+        saveChatState(false);
         
         // Generate new session ID
         const newSessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -78,21 +183,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add click event listeners
     if (chatHeader) {
         chatHeader.addEventListener('click', function(e) {
-            // When chat is closed, clicking anywhere on the header opens it
             if (!isChatOpen) {
                 console.log("Chat header clicked to open!");
                 e.preventDefault();
                 e.stopPropagation();
                 toggleChatbot();
             }
-            // When chat is open, only the header bar should be clickable to close
         });
     }
 
-    // Make chat header bar clickable to close (when chat is open)
     if (chatHeaderBar) {
         chatHeaderBar.addEventListener('click', function(e) {
-            // Only close if clicking the header bar itself (not the close button)
             if (isChatOpen && !e.target.closest('.close-btn')) {
                 console.log("Chat header bar clicked to close!");
                 e.preventDefault();
@@ -129,13 +230,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Prevent input clicks from closing chat
         userInput.addEventListener('click', function(e) {
             e.stopPropagation();
         });
     }
 
-    // Prevent chat area clicks from closing chat, but allow header clicks
+    // Prevent chat area clicks from closing chat
     if (chatArea) {
         chatArea.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -150,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Updated createMessage function for dynamic sizing
+    // Create message function
     function createMessage(content, isUser = false) {
         const messageDiv = document.createElement("div");
         messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
@@ -165,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Bot messages: With avatar and content area
             const avatar = document.createElement("div");
             avatar.className = "msg-avatar bot";
-            avatar.textContent = "J";
+            avatar.textContent = "C";
             
             const messageContent = document.createElement("div");
             messageContent.className = "msg-content";
@@ -180,7 +280,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return messageDiv;
     }
 
-    // ENHANCED: Send message function with reset handling
+    // Send message function - NOW SAVES TO LOCALSTORAGE
     async function sendMessage() {
         console.log("sendMessage called");
         
@@ -192,23 +292,33 @@ document.addEventListener('DOMContentLoaded', function() {
         const input = userInput.value.trim();
         if (!input) return;
 
-        // Display user message with dynamic sizing
+        // Display user message
         if (chatArea) {
             const userMessage = createMessage(input, true);
             chatArea.appendChild(userMessage);
             chatArea.scrollTop = chatArea.scrollHeight;
         }
+        
+        // SAVE USER MESSAGE TO LOCALSTORAGE
+        saveMessageToStorage(input, true);
+        
         userInput.value = "";
 
-        // Display typing indicator with avatar
+        // Display typing indicator
         const typingMessage = createMessage('<i>typing...</i>', false);
         if (chatArea) {
             chatArea.appendChild(typingMessage);
             chatArea.scrollTop = chatArea.scrollHeight;
         }
 
+        // Record start time for minimum delay
+        const startTime = Date.now();
+        const MINIMUM_TYPING_DELAY = 500; // 2 seconds
+
+        //https://stfrancisbacoor.com/chatbot/api.php?action=chat
+        // Call chatbot API
         try {
-            const response = await fetch("http://localhost:5000/chat", {
+            const response = await fetch("chatbot/api.php?action=chat", {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
@@ -227,7 +337,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             console.log("API returned:", data);
 
-            // Replace typing message with actual response
+            // Get bot reply
             let botReply;
             if (data.status === 'rate_limited') {
                 botReply = data.error;
@@ -237,6 +347,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 botReply = data.response || "Sorry, no reply from API.";
             }
             
+            // Calculate elapsed time and wait if needed
+            const elapsedTime = Date.now() - startTime;
+            const remainingDelay = Math.max(0, MINIMUM_TYPING_DELAY - elapsedTime);
+            
+            // Wait for remaining delay before showing response
+            await new Promise(resolve => setTimeout(resolve, remainingDelay));
+            
             // Remove typing message and add real response
             if (chatArea && typingMessage) {
                 chatArea.removeChild(typingMessage);
@@ -244,17 +361,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 chatArea.appendChild(botMessage);
                 chatArea.scrollTop = chatArea.scrollHeight;
             }
+            
+            // SAVE BOT MESSAGE TO LOCALSTORAGE
+            saveMessageToStorage(botReply, false);
 
-            // NEW: Handle shutdown status - reset chat after showing goodbye message
+            // Handle shutdown status
             if (data.status === 'shutdown') {
                 console.log("Shutdown detected, resetting chat in 3 seconds...");
                 setTimeout(() => {
                     resetChat();
-                }, 3000); // Wait 3 seconds to let user read the goodbye message
-                return; // Exit early, don't show badge
+                }, 3000);
+                return;
             }
 
-            // Show badge if chat is closed (only for non-shutdown messages)
+            // Show badge if chat is closed
             if (!isChatOpen && newMsgBadge) {
                 newMsgBadge.style.display = "flex";
             }
@@ -264,20 +384,28 @@ document.addEventListener('DOMContentLoaded', function() {
             
             let errorMessage;
             if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                errorMessage = "Cannot connect to server. Please make sure the API is running on localhost:5000.";
+                errorMessage = "Cannot connect to server. Please make sure the API is running.";
             } else if (error.message.includes('429')) {
                 errorMessage = "Too many requests. Please wait a moment before trying again.";
             } else {
                 errorMessage = "Sorry, something went wrong. Please try again.";
             }
             
-            // Replace typing message with error message
+            // Calculate elapsed time and wait if needed (for errors too)
+            const elapsedTime = Date.now() - startTime;
+            const remainingDelay = Math.max(0, MINIMUM_TYPING_DELAY - elapsedTime);
+            await new Promise(resolve => setTimeout(resolve, remainingDelay));
+            
+            // Remove typing message and add error
             if (chatArea && typingMessage) {
                 chatArea.removeChild(typingMessage);
                 const errorBotMessage = createMessage(errorMessage, false);
                 chatArea.appendChild(errorBotMessage);
                 chatArea.scrollTop = chatArea.scrollHeight;
             }
+            
+            // SAVE ERROR MESSAGE TO LOCALSTORAGE
+            saveMessageToStorage(errorMessage, false);
             
             if (!isChatOpen && newMsgBadge) {
                 newMsgBadge.style.display = "flex";
@@ -297,18 +425,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
     console.log("Morphing chatbot initialized successfully!");
     
-    // Initialize chat with welcome message
+    // Initialize chat - LOAD HISTORY OR SHOW WELCOME
     initializeChat();
     
     function initializeChat() {
-        if (chatArea) {
-            const welcomeMessage = createMessage("Hello, I'm J.A.R.V.I.S. your virtual assistant. How can I help you today?", false);
-            chatArea.appendChild(welcomeMessage);
+        const existingHistory = localStorage.getItem('jarvis_chat_history');
+        
+        if (existingHistory && JSON.parse(existingHistory).length > 0) {
+            // Load existing chat history
+            console.log("Loading existing chat history...");
+            loadChatHistory();
+        } else {
+            // Show welcome message for new chat
+            console.log("No history found, showing welcome message...");
+            if (chatArea) {
+                const welcomeMessage = createMessage("Hello, I'm Ate Claire, your virtual assistant. How can I help you today?", false);
+                chatArea.appendChild(welcomeMessage);
+                
+                // Save welcome message to history
+                saveMessageToStorage("Hello, I'm Ate Claire, your virtual assistant. How can I help you today?", false);
+            }
+        }
+
+        // NEW: Check if chat was open on previous page and reopen it
+        if (getChatState()) {
+            console.log("Chat was open on previous page, reopening...");
+            setTimeout(() => {
+                if (!isChatOpen) {
+                    toggleChatbot();
+                }
+            }, 100); // Small delay to ensure DOM is ready
         }
     }
 });
 
-// Updated CSS styles for dynamic message sizing
+// CSS styles for dynamic message sizing
 function addMessageStyles() {
     const style = document.createElement('style');
     style.textContent = `
